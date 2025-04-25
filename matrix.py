@@ -54,27 +54,33 @@ class Matrix:
         """
         Multiply the matrix by a scalar value.
         """
-        for i in range(len(self._data)):
-            for j in range(len(self._data[0])):
+        for i in range(self.shape[0]):
+            for j in range(self.shape[1]):
                 self.setitem(i,j,self.getitem(i,j)*value)
 
     def multiply(self, mat):
         """
-        Multiply the matrix by another matrix.
+        Multiply elementwise the matrix by another matrix.
         """
-        out = [[0 for _ in range(mat.shape[1])] for _ in range(len(self._data))]
-        for j in range(mat.shape[1]):
-            for i in range(len(self._data)):
-                for k in range(mat.shape[0]):
-                    out[i][j] += self.getitem(i,k) * mat.getitem(k,j)
-        return Matrix(out)
+        if self.shape != mat.shape:
+            return "Incompatible shapes"
+        out = Matrix.zeros(self.shape)
+        for i in range(self.shape[0]):
+            for j in range(self.shape[1]):
+                out.setitem(i,j,self.getitem(i,j)*mat.getitem(i,j))
+        
 
 
     def divide(self, mat):
         """
         Divide the matrix by another matrix.
         """
-        pass
+        if self.shape != mat.shape:
+            return "Incompatible shapes"
+        out = Matrix.zeros(self.shape)
+        for i in range(self.shape[0]):
+            for j in range(self.shape[1]):
+                out.setitem(i,j,self.getitem(i,j) / mat.getitem(i,j))
 
     def sum(self):
         """
@@ -86,7 +92,7 @@ class Matrix:
                 total += item
         return total
 
-    def add(self, mat):
+    def __add__(self, mat):
         """
         Add another matrix to this matrix.
         """
@@ -99,32 +105,37 @@ class Matrix:
         return out
 
 
-    def sub(self, mat):
+    def __sub__(self, mat):
         """
         Subtract another matrix from this matrix.
         """
-        return self.add(mat.scalar_multiply(-1))
+        return self.__add__(mat.scalar_multiply(-1))
 
-    def matmul(self, mat):
+    def __matmul__(self, mat):
         """
         Matrix multiplication with another matrix.
         """
-        pass
+        out = [[0 for _ in range(mat.shape[1])] for _ in range(len(self._data))]
+        for j in range(mat.shape[1]):
+            for i in range(len(self._data)):
+                for k in range(mat.shape[0]):
+                    out[i][j] += self.getitem(i,k) * mat.getitem(k,j)
+        return Matrix(out)
 
-    def mul(self, other):
+    def __mul__(self, other):
         """
         Multiply the matrix element-wise by another matrix or a scalar.
         """
-        pass
+        return self.multiply(other)
 
     def truediv(self, other):
         """
         Divide the matrix element-wise by another matrix or a scalar.
         """
-        pass
+        return self.divide(other)
 
-    def str(self):
+    def __str__(self):
         """
         Return a string representation of the matrix.
         """
-        pass
+        return '\n'.join([str(row) for row in self._data])
