@@ -95,3 +95,11 @@ class ActivationLayer(Layer):
         Compute the derivative of the activation function
         """
         pass
+    
+    
+class ReLU(ActivationLayer):
+    def __call__(self, in_matrix):
+        return in_matrix.map(lambda x: max(0, x))
+    
+    def derivative(self, in_matrix):
+        return in_matrix.map(lambda x: 1 if x > 0 else 0)
