@@ -64,3 +64,34 @@ class DenseLayer(Layer):
     @property
     def neurons(self):
         return self._neurons
+    
+
+class ActivationLayer(Layer):
+    def setup(self, input_neurons, batch_size):
+        self._neurons = input_neurons
+        self.batch_size = batch_size
+        
+    def forward(self, in_matrix):
+        self.in_matrix = in_matrix
+        return self(in_matrix)
+    
+    def backward(self, gradients):
+        return gradients * self.derivative(self.in_matrix)
+    
+    @property
+    def neurons(self):
+        return self._neurons
+    
+    @abstractmethod
+    def __call__(self, in_matrix):
+        """
+        Apply the activation function to the input matrix
+        """
+        pass
+    
+    @abstractmethod
+    def derivative(self, in_matrix):
+        """
+        Compute the derivative of the activation function
+        """
+        pass
