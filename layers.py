@@ -5,7 +5,7 @@ from math import exp
 
 class Layer(ABC):
     @abstractmethod
-    def setup(self, input_neurons, batch_size):
+    def setup(self, input_neurons):
         """
         Initialize the weights and biases for the layer
         """
@@ -44,10 +44,9 @@ class DenseLayer(Layer):
         self.dw = None
         self.db = None
         
-    def setup(self, input_neurons, batch_size):
+    def setup(self, input_neurons):
         self.weights = Matrix.random((self._neurons, input_neurons))
         self.biases = Matrix.random((self._neurons, 1))
-        self.batch_size = batch_size
         
     def forward(self, in_matrix):
         self.in_matrix = in_matrix
@@ -68,9 +67,8 @@ class DenseLayer(Layer):
     
 
 class ActivationLayer(Layer):
-    def setup(self, input_neurons, batch_size):
+    def setup(self, input_neurons):
         self._neurons = input_neurons
-        self.batch_size = batch_size
         
     def forward(self, in_matrix):
         self.in_matrix = in_matrix
