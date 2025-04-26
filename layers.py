@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from matrix import Matrix
+from math import exp
 
 
 class Layer(ABC):
@@ -103,3 +104,14 @@ class ReLU(ActivationLayer):
     
     def derivative(self, in_matrix):
         return in_matrix.map(lambda x: 1 if x > 0 else 0)
+    
+    
+class Sigmoid(ActivationLayer):
+    def __call__(self, in_matrix):
+        return in_matrix.map(self.sigmoid)
+    
+    def derivative(self, in_matrix):
+        return in_matrix.map(lambda x: self.sigmoid(x) * (1 - self.sigmoid(x)))
+    
+    def sigmoid(self, x):
+        return 1 / (1 + exp(-x))
