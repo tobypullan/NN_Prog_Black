@@ -60,9 +60,9 @@ class Matrix:
         """
         pass
 
-    def sum(self):
+    def sum(self, axis):
         """
-        Return the sum of all elements in the matrix.
+        Return the sum of all elements in the matrix, possibilty along a certain axis.
         """
         pass
 
@@ -99,5 +99,11 @@ class Matrix:
     def str(self):
         """
         Return a string representation of the matrix.
+        """
+        pass
+    
+    def concat(self, mat, axis):
+        """
+        Concatenate this matrix with another matrix along the specified axis.
         """
         pass
