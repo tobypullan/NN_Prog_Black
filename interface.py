@@ -60,9 +60,9 @@ class Matrix:
         """
         pass
 
-    def sum(self, axis):
+    def sum(self):
         """
-        Return the sum of all elements in the matrix, possibilty along a certain axis.
+        Return the sum of all elements in the matrix.
         """
         pass
 
