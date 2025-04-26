@@ -4,7 +4,7 @@ from matrix import Matrix
 
 class Layer(ABC):
     @abstractmethod
-    def setup(self, input_neurons):
+    def setup(self, input_neurons, batch_size):
         """
         Initialize the weights and biases for the layer
         """
