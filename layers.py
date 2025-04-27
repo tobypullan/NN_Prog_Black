@@ -53,8 +53,8 @@ class DenseLayer(Layer):
         return self.weights @ in_matrix + self.biases
     
     def backward(self, gradients, learning_rate):
-        self.dw = gradients @ self.in_matrix.transpose() * 1 / self.batch_size
-        self.db = gradients.sum(axis=0) * 1 / self.batch_size
+        self.dw = gradients @ self.in_matrix.transpose() * 1 / self.in_matrix.shape[1]
+        self.db = gradients.sum(axis=0) * 1 / self.in_matrix.shape[1]
         
         self.weights = self.weights - self.dw * learning_rate
         self.biases = self.biases - self.db * learning_rate
