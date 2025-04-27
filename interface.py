@@ -107,3 +107,21 @@ class Matrix:
         Concatenate this matrix with another matrix along the specified axis.
         """
         pass
+    
+    def vec_add(self, vec):
+        """
+        Add a vector to the matrix.
+        """
+        pass
+    
+    def vec_sub(self, vec):
+        """
+        Subtract a vector from the matrix.
+        """
+        pass
+    
+    def map(self, func):
+        """
+        Apply a function to each element of the matrix.
+        """
+        pass
