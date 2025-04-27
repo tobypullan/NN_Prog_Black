@@ -82,15 +82,39 @@ class Matrix:
             for j in range(self.shape[1]):
                 out.setitem(i,j,self.getitem(i,j) / mat.getitem(i,j))
 
-    def sum(self):
+    def sum(self,axis=None):
         """
         Return the sum of all elements in the matrix.
+
+        axis = 0 sum across cols
+        axis = 1 sum across rows
         """
-        total = 0
-        for row in self._data:
-            for item in row:
-                total += item
-        return total
+        if axis == None:
+            total = 0
+            for row in self._data:
+                for item in row:
+                    total += item
+            return total
+        elif axis == 0:
+            for row in self._data:
+                row = sum(row)
+            return self
+        elif axis == 1:
+            data = [sum([row[i] for row in self._data]) for i in range(self.shape[0])]
+            return Matrix(data)
+        else:
+            return "invalid axis"
+    
+    def vecadd(self, vec):
+        """
+        broadcasts vec to number of cols of mat then adds together
+        """
+        for i in range(self.shape[0]):
+            for j in range(self.shape[1]):
+                self.setitem(i,j,self.getitem(i,j)+vec.getitem(i,0))
+
+    def vecsub(self, vec):
+        self.vecadd(vec.scalar_multiply(-1))
 
     def __add__(self, mat):
         """
@@ -139,3 +163,19 @@ class Matrix:
         Return a string representation of the matrix.
         """
         return '\n'.join([str(row) for row in self._data])
+    
+    def concat(self,mat,axis):
+        """
+        Concatenate this matrix with another matrix along the specified axis.
+        """
+        pass
+
+    def map(self, func):
+        """
+        Apply a function to all elements of the matrix and return a new matrix.
+        """
+        result = Matrix.zeroes(self.shape)
+        for i in range(self.shape[0]):
+            for j in range(self.shape[1]):
+                result.setitem(i, j, func(self.getitem(i, j)))
+        return result
