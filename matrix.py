@@ -54,9 +54,11 @@ class Matrix:
         """
         Multiply the matrix by a scalar value.
         """
+        out = Matrix.zeroes(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                self.setitem(i,j,self.getitem(i,j)*value)
+                out.setitem(i,j,self.getitem(i,j)*value)
+        return out
 
     def multiply(self, mat):
         """
@@ -68,6 +70,7 @@ class Matrix:
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out.setitem(i,j,self.getitem(i,j)*mat.getitem(i,j))
+        return out
         
 
 
@@ -81,6 +84,7 @@ class Matrix:
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out.setitem(i,j,self.getitem(i,j) / mat.getitem(i,j))
+        return out
 
     def sum(self,axis=None):
         """
@@ -96,24 +100,27 @@ class Matrix:
                     total += item
             return total
         elif axis == 0:
+            out = Matrix.zeroes(self.shape[0],1)
             for row in self._data:
-                row = sum(row)
-            return self
+                out._data += [sum(row)]
+            return out
         elif axis == 1:
             data = [sum([row[i] for row in self._data]) for i in range(self.shape[0])]
             return Matrix(data)
         else:
             return "invalid axis"
     
-    def vecadd(self, vec):
+    def vec_add(self, vec):
         """
         broadcasts vec to number of cols of mat then adds together
         """
+        out = Matrix.zeroes(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                self.setitem(i,j,self.getitem(i,j)+vec.getitem(i,0))
+                out.setitem(i,j,self.getitem(i,j)+vec.getitem(i,0))
+        return out
 
-    def vecsub(self, vec):
+    def vec_sub(self, vec):
         self.vecadd(vec.scalar_multiply(-1))
 
     def __add__(self, mat):
@@ -164,11 +171,36 @@ class Matrix:
         """
         return '\n'.join([str(row) for row in self._data])
     
-    def concat(self,mat,axis):
+    def concat(self, mat, axis):
         """
         Concatenate this matrix with another matrix along the specified axis.
+        axis=0: concatenate vertically (combine rows)
+        axis=1: concatenate horizontally (combine columns)
         """
-        pass
+        if axis == 0:
+            # Check if columns match
+            if self.shape[1] != mat.shape[1]:
+                return "Incompatible shapes for vertical concatenation"
+            
+            # Create new data by combining rows
+            new_data = self._data + mat._data
+            return Matrix(new_data)
+        
+        elif axis == 1:
+            # Check if rows match
+            if self.shape[0] != mat.shape[0]:
+                return "Incompatible shapes for horizontal concatenation"
+            
+            # Create new data by combining columns
+            new_data = []
+            for i in range(self.shape[0]):
+                row = self._data[i] + mat._data[i]
+                new_data.append(row)
+            
+            return Matrix(new_data)
+        
+        else:
+            return "Invalid axis. Use 0 for vertical or 1 for horizontal concatenation."
 
     def map(self, func):
         """
