@@ -19,7 +19,7 @@ class Layer(ABC):
         pass
     
     @abstractmethod
-    def backward(self, gradients):
+    def backward(self, gradients, learning_rate):
         """
         Perform the backward pass for the layer
         """
@@ -50,7 +50,7 @@ class DenseLayer(Layer):
         
     def forward(self, in_matrix):
         self.in_matrix = in_matrix
-        return self.weights @ in_matrix + self.biases
+        return (self.weights @ in_matrix).vec_add(self.biases)
     
     def backward(self, gradients, learning_rate):
         self.dw = gradients @ self.in_matrix.transpose() * 1 / self.in_matrix.shape[1]
@@ -74,7 +74,7 @@ class ActivationLayer(Layer):
         self.in_matrix = in_matrix
         return self(in_matrix)
     
-    def backward(self, gradients):
+    def backward(self, gradients, learning_rate):
         return gradients * self.derivative(self.in_matrix)
     
     @property
