@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
+from math import exp, tanh
 from matrix import Matrix
-from math import exp
 
 
 class Layer(ABC):
@@ -53,11 +53,11 @@ class DenseLayer(Layer):
         return (self.weights @ in_matrix).vec_add(self.biases)
     
     def backward(self, gradients, learning_rate):
-        self.dw = gradients @ self.in_matrix.transpose() * 1 / self.in_matrix.shape[1]
-        self.db = gradients.sum(axis=0) * 1 / self.in_matrix.shape[1]
+        self.dw = gradients @ self.in_matrix.transpose().scalar_multiply(1 / self.in_matrix.shape[1])
+        self.db = gradients.sum(axis=0).scalar_multiply(1 / self.in_matrix.shape[1])
         
-        self.weights = self.weights - self.dw * learning_rate
-        self.biases = self.biases - self.db * learning_rate
+        self.weights = self.weights - self.dw.scalar_multiply(learning_rate)
+        self.biases = self.biases - self.db.scalar_multiply(learning_rate)
         
         return self.weights.transpose() @ gradients
     
@@ -113,3 +113,12 @@ class Sigmoid(ActivationLayer):
     
     def sigmoid(self, x):
         return 1 / (1 + exp(-x))
+    
+
+class Tanh(ActivationLayer):
+    def __call__(self, in_matrix):
+        return in_matrix.map(tanh)
+    
+    def derivative(self, in_matrix):
+        return in_matrix.map(lambda x: 1 - tanh(x) ** 2)
+    
