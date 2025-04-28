@@ -193,7 +193,7 @@ class Matrix:
         axis=0: concatenate vertically (combine rows)
         axis=1: concatenate horizontally (combine columns)
         """
-        if axis == 0:
+        if axis == 1:
             # Check if columns match
             if self.shape[1] != mat.shape[1]:
                 return "Incompatible shapes for vertical concatenation"
@@ -202,7 +202,7 @@ class Matrix:
             new_data = self._data + mat._data
             return Matrix(new_data)
         
-        elif axis == 1:
+        elif axis == 0:
             # Check if rows match
             if self.shape[0] != mat.shape[0]:
                 return "Incompatible shapes for horizontal concatenation"
