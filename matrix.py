@@ -29,36 +29,44 @@ class Matrix:
         """
         return Matrix([[random() - 0.5 for _ in range(shape[1])] for _ in range(shape[0])])
 
-    def __getitem__(self, row, col):
+    def __getitem__(self, idx):
         """
         Get the value at the specified row and column.
         """
+        
+        row, col = idx
         return self._data[row][col]
 
-    def __setitem__(self, row, col, value):
+    def __setitem__(self, idx, value):
         """
         Set the value at the specified row and column.
         """
+        
+        row, col = idx
         self._data[row][col] = value
 
     def transpose(self):
         """
         Transpose the matrix.
         """
+        
         tData = Matrix.zeroes(self.shape[1],self.shape[0])
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 tData[j, i] = self[i, j]
+                
         return tData
 
     def scaler_multiply(self, value):
         """
         Multiply the matrix by a scalar value.
         """
+        
         out = Matrix.zeroes(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out[i, j] = self[i, j] * value
+                
         return out
 
     def multiply(self, mat):
@@ -67,10 +75,12 @@ class Matrix:
         """
         if self.shape != mat.shape:
             return "Incompatible shapes"
+        
         out = Matrix.zeros(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out[i, j] = self[i, j] * mat[i, j]
+                
         return out
 
     def divide(self, mat):
@@ -79,10 +89,12 @@ class Matrix:
         """
         if self.shape != mat.shape:
             return "Incompatible shapes"
+        
         out = Matrix.zeros(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out[i, j] = self[i, j] / mat[i, j]
+                
         return out
 
     def sum(self,axis=None):
@@ -163,8 +175,8 @@ class Matrix:
         out = [[0 for _ in range(mat.shape[1])] for _ in range(len(self._data))]
         
         for j in range(mat.shape[1]):
-            for i in range(len(self._data)):
-                for k in range(mat.shape[0]):
+            for k in range(mat.shape[0]):
+                for i in range(len(self._data)):
                     out[i][j] += self[i, k] * mat[k, j]
                     
         return Matrix(out)
