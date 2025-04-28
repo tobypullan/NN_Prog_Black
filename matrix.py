@@ -144,7 +144,7 @@ class Matrix:
         return out
 
     def vec_sub(self, vec):
-        self.vec_add(vec.scalar_multiply(-1))
+        return self.vec_add(vec.scalar_multiply(-1))
 
     def __add__(self, mat):
         """
@@ -248,29 +248,29 @@ if __name__ == "__main__":
     mat2 = Matrix([[5, 6], [7, 8]])
     vec = Matrix([[1], [2]])
     
-    print(mat1.scalar_multiply(2))
+    print(mat1.scalar_multiply(2), end="\n\n")
     
-    print(mat1 @ mat2)
+    print(mat1 @ mat2, end="\n\n")
     
-    print(mat1 + mat2)
+    print(mat1 + mat2, end="\n\n")
     
-    print(mat1 - mat2)
+    print(mat1 - mat2, end="\n\n")
     
-    print(mat1 * mat2)
+    print(mat1 * mat2, end="\n\n")
     
-    print(mat1 / mat2)
+    print(mat1 / mat2, end="\n\n")
     
-    print(mat1.sum(axis=0))
+    print(mat1.sum(axis=0), end="\n\n")
     
-    print(mat1.sum(axis=1))
+    print(mat1.sum(axis=1), end="\n\n")
     
-    print(mat1.vec_add(vec))
+    print(mat1.vec_add(vec), end="\n\n")
     
-    print(mat1.vec_sub(vec))
+    print(mat1.vec_sub(vec), end="\n\n")
     
-    print(mat1.concat(mat2, axis=0))
+    print(mat1.concat(mat2, axis=0), end="\n\n")
     
-    print(mat1.concat(mat2, axis=1))
+    print(mat1.concat(mat2, axis=1), end="\n\n")
     
-    print(mat1.transpose())
+    print(mat1.transpose(), end="\n\n")
     
