@@ -15,25 +15,27 @@ class Matrix:
         """
         return Matrix([[0 for _ in range(shape[1])] for _ in range(shape[0])])
 
+    @staticmethod
     def ones(shape):
         """
         Return a matrix of ones with the given shape.
         """
         return Matrix([[1 for _ in range(shape[1])] for _ in range(shape[0])])
 
+    @staticmethod
     def random(shape):
         """
         Return a matrix with random values in the given shape.
         """
-        return Matrix([[random() for _ in range(shape[1])] for _ in range(shape[0])])
+        return Matrix([[random() - 0.5 for _ in range(shape[1])] for _ in range(shape[0])])
 
-    def getitem(self, row, col):
+    def __getitem__(self, row, col):
         """
         Get the value at the specified row and column.
         """
         return self._data[row][col]
 
-    def setitem(self, row, col, value):
+    def __setitem__(self, row, col, value):
         """
         Set the value at the specified row and column.
         """
@@ -46,9 +48,8 @@ class Matrix:
         tData = Matrix.zeroes(self.shape[1],self.shape[0])
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                tData.setitem(j,i,self.getitem(i,j))
+                tData[j, i] = self[i, j]
         return tData
-
 
     def scaler_multiply(self, value):
         """
@@ -57,7 +58,7 @@ class Matrix:
         out = Matrix.zeroes(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                out.setitem(i,j,self.getitem(i,j)*value)
+                out[i, j] = self[i, j] * value
         return out
 
     def multiply(self, mat):
@@ -69,10 +70,8 @@ class Matrix:
         out = Matrix.zeros(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                out.setitem(i,j,self.getitem(i,j)*mat.getitem(i,j))
+                out[i, j] = self[i, j] * mat[i, j]
         return out
-        
-
 
     def divide(self, mat):
         """
@@ -83,7 +82,7 @@ class Matrix:
         out = Matrix.zeros(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                out.setitem(i,j,self.getitem(i,j) / mat.getitem(i,j))
+                out[i, j] = self[i, j] / mat[i, j]
         return out
 
     def sum(self,axis=None):
@@ -117,11 +116,11 @@ class Matrix:
         out = Matrix.zeroes(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                out.setitem(i,j,self.getitem(i,j)+vec.getitem(i,0))
+                out[i, j] = self[i, j] + vec[i, 0]
         return out
 
     def vec_sub(self, vec):
-        self.vecadd(vec.scalar_multiply(-1))
+        self.vec_add(vec.scalar_multiply(-1))
 
     def __add__(self, mat):
         """
@@ -132,7 +131,7 @@ class Matrix:
         out = Matrix.zeros(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                out.setitem(i,j,self.getitem(i,j) + mat.getitem(i,j))
+                out[i, j] = self[i, j] + mat[i, j]
         return out
 
 
@@ -150,7 +149,7 @@ class Matrix:
         for j in range(mat.shape[1]):
             for i in range(len(self._data)):
                 for k in range(mat.shape[0]):
-                    out[i][j] += self.getitem(i,k) * mat.getitem(k,j)
+                    out[i][j] += self[i, k] * mat[k, j]
         return Matrix(out)
 
     def __mul__(self, other):
@@ -209,5 +208,5 @@ class Matrix:
         result = Matrix.zeroes(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
-                result.setitem(i, j, func(self.getitem(i, j)))
+                result[i, j] = func(self[i, j])
         return result
