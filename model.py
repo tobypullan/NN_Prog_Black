@@ -51,19 +51,21 @@ class Model:
             x_batch = x_samples[0]
             y_batch = y_samples[0]
             for x_sample, y_sample in zip(x_samples[1:], y_samples[1:]):
-                x_batch = x_batch.concat(x_sample)
-                y_batch = y_batch.concat(y_sample)
+                x_batch = x_batch.concat(x_sample, axis=0)
+                y_batch = y_batch.concat(y_sample, axis=0)
                 
             x_batches.append(x_batch)
             y_batches.append(y_batch)
         
-        for epoch in range(epochs):
+        for epoch in range(1, epochs + 1):
             epoch_loss = 0
             for x_batch, y_batch in zip(x_batches, y_batches):
                 predictions = self.predict(x_batch)
                 loss = self.backpropagate(predictions, y_batch, loss_function, learning_rate)
-                average_loss = loss.sum(axis=1) / x_batch.shape[1]
-                epoch_loss += average_loss.sum()
+                average_loss = loss.sum() / x_batch.shape[1]
+                epoch_loss += average_loss
+                
+            epoch_loss /= len(x_batches)
                 
             if epoch % log_interval == 0:
-                print(f"Epoch {epoch}, Loss: {loss}")
+                print(f"Epoch {epoch}, Loss: {epoch_loss}")
