@@ -9,4 +9,4 @@ class MSE: # mean square error loss function
         """
         used in backpropagation, derivative of loss
         """
-        return (prediction - y) * 2
+        return (prediction - y).scalar_multiply(2)
