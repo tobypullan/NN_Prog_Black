@@ -50,14 +50,14 @@ class Matrix:
         Transpose the matrix.
         """
         
-        tData = Matrix.zeroes(self.shape[1],self.shape[0])
+        tData = Matrix.zeroes((self.shape[1], self.shape[0]))
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 tData[j, i] = self[i, j]
                 
         return tData
 
-    def scaler_multiply(self, value):
+    def scalar_multiply(self, value):
         """
         Multiply the matrix by a scalar value.
         """
@@ -76,7 +76,7 @@ class Matrix:
         if self.shape != mat.shape:
             return "Incompatible shapes"
         
-        out = Matrix.zeros(self.shape)
+        out = Matrix.zeroes(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out[i, j] = self[i, j] * mat[i, j]
@@ -90,7 +90,7 @@ class Matrix:
         if self.shape != mat.shape:
             return "Incompatible shapes"
         
-        out = Matrix.zeros(self.shape)
+        out = Matrix.zeroes(self.shape)
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out[i, j] = self[i, j] / mat[i, j]
@@ -113,7 +113,7 @@ class Matrix:
             return total
         
         elif axis == 0:
-            out = Matrix.zeroes(self.shape[0], 1)
+            out = Matrix.zeroes((self.shape[0], 1))
             
             for idx, row in enumerate(self._data):
                 out[idx, 0] = sum(row)
@@ -121,7 +121,7 @@ class Matrix:
             return out
         
         elif axis == 1:
-            out = Matrix.zeroes(1, self.shape[1])
+            out = Matrix.zeroes((1, self.shape[1]))
             
             for idx, row in enumerate(self._data):
                 for jdx, val in enumerate(row):
@@ -153,7 +153,7 @@ class Matrix:
         if self.shape != mat.shape:
             return "Incompatible shapes"
         
-        out = Matrix.zeros(self.shape)
+        out = Matrix.zeroes(self.shape)
         
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
@@ -187,7 +187,7 @@ class Matrix:
         """
         return self.multiply(other)
 
-    def truediv(self, other):
+    def __truediv__(self, other):
         """
         Divide the matrix element-wise by another matrix or a scalar.
         """
@@ -241,3 +241,36 @@ class Matrix:
                 result[i, j] = func(self[i, j])
                 
         return result
+    
+
+if __name__ == "__main__":
+    mat1 = Matrix([[1, 2], [3, 4]])
+    mat2 = Matrix([[5, 6], [7, 8]])
+    vec = Matrix([[1], [2]])
+    
+    print(mat1.scalar_multiply(2))
+    
+    print(mat1 @ mat2)
+    
+    print(mat1 + mat2)
+    
+    print(mat1 - mat2)
+    
+    print(mat1 * mat2)
+    
+    print(mat1 / mat2)
+    
+    print(mat1.sum(axis=0))
+    
+    print(mat1.sum(axis=1))
+    
+    print(mat1.vec_add(vec))
+    
+    print(mat1.vec_sub(vec))
+    
+    print(mat1.concat(mat2, axis=0))
+    
+    print(mat1.concat(mat2, axis=1))
+    
+    print(mat1.transpose())
+    
