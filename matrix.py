@@ -94,18 +94,28 @@ class Matrix:
         """
         if axis == None:
             total = 0
+            
             for row in self._data:
-                for item in row:
-                    total += item
+                total += sum(row)
+                
             return total
+        
         elif axis == 0:
-            out = Matrix.zeroes(self.shape[0],1)
-            for row in self._data:
-                out._data += [sum(row)]
+            out = Matrix.zeroes(self.shape[0], 1)
+            
+            for idx, row in enumerate(self._data):
+                out[idx, 0] = sum(row)
+                
             return out
+        
         elif axis == 1:
-            data = [sum([row[i] for row in self._data]) for i in range(self.shape[0])]
-            return Matrix(data)
+            out = Matrix.zeroes(1, self.shape[1])
+            
+            for idx, row in enumerate(self._data):
+                for jdx, val in enumerate(row):
+                    out[0, jdx] += val
+                    
+            return out
         else:
             return "invalid axis"
     
@@ -114,9 +124,11 @@ class Matrix:
         broadcasts vec to number of cols of mat then adds together
         """
         out = Matrix.zeroes(self.shape)
+        
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out[i, j] = self[i, j] + vec[i, 0]
+                
         return out
 
     def vec_sub(self, vec):
@@ -128,10 +140,13 @@ class Matrix:
         """
         if self.shape != mat.shape:
             return "Incompatible shapes"
+        
         out = Matrix.zeros(self.shape)
+        
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 out[i, j] = self[i, j] + mat[i, j]
+                
         return out
 
 
@@ -146,10 +161,12 @@ class Matrix:
         Matrix multiplication with another matrix.
         """
         out = [[0 for _ in range(mat.shape[1])] for _ in range(len(self._data))]
+        
         for j in range(mat.shape[1]):
             for i in range(len(self._data)):
                 for k in range(mat.shape[0]):
                     out[i][j] += self[i, k] * mat[k, j]
+                    
         return Matrix(out)
 
     def __mul__(self, other):
@@ -206,7 +223,9 @@ class Matrix:
         Apply a function to all elements of the matrix and return a new matrix.
         """
         result = Matrix.zeroes(self.shape)
+        
         for i in range(self.shape[0]):
             for j in range(self.shape[1]):
                 result[i, j] = func(self[i, j])
+                
         return result
